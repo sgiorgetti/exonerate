@@ -1,15 +1,20 @@
 # Autotools files
 autom4te.cache/
 **/Makefile.in
+**/Makefile
 aclocal.m4
 compile
 config.guess
 config.sub
 configure
+configure~
+config.log
+config.status
 depcomp
 install-sh
 missing
 test-driver
+**/.deps
 
 # Object files
 *.o
