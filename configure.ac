@@ -4,7 +4,7 @@
 #
 # ( Borrowed some config tricks from gtk+, gnet, xscreensaver, mutt )
 
-AC_INIT([exonerate], [2.4.0])
+AC_INIT([exonerate],[2.4.1])
 AC_CONFIG_SRCDIR([src/sequence/sequence.c])
 AM_INIT_AUTOMAKE
 AC_PROG_CC
@@ -20,7 +20,15 @@ AC_CHECK_DECLS([_XOPEN_PATH_MAX],[],[AC_DEFINE([_XOPEN_PATH_MAX],[1024])],\
                [[#include <limits.h>]])
 AC_C_CONST
 AC_C_INLINE
-AC_HEADER_STDC # CHECKS FOR stdlib.h stdarg.h string.h and float.h
+m4_warn([obsolete],
+[The preprocessor macro `STDC_HEADERS' is obsolete.
+  Except in unusual embedded environments, you can safely include all
+  ISO C90 headers unconditionally.])dnl
+# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+ # CHECKS FOR stdlib.h stdarg.h string.h and float.h
 AC_CHECK_HEADERS(limits.h errno.h math.h strings.h ctype.h \
                  sys/stat.h sys/types.h time.h unistd.h)
 
@@ -85,10 +93,9 @@ echo "----------------------------------------------------------------"
 # THIS IS TO FIX PROBLEMS WHERE socklen_t ISN'T DEFINED (eg. ON OSF)
 #
 AC_MSG_CHECKING(for socklen_t)
-AC_TRY_COMPILE([#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
 #include <sys/socket.h>
-socklen_t x;], [], [AC_MSG_RESULT(yes)],
-[AC_TRY_COMPILE([#include <sys/types.h>
+socklen_t x;]], [[]])],[AC_MSG_RESULT(yes)],[_au_m4_changequote([,])AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/socket.h>
 int accept(int, struct sockaddr *, size_t *);],
 [], [AC_MSG_RESULT(size_t)
@@ -319,7 +326,7 @@ AC_SUBST(installed_util_list)
 
 echo "----------------------------------------------------------------"
 
-AC_OUTPUT(Makefile                   \
+AC_CONFIG_FILES([Makefile                   \
           doc/Makefile               \
           doc/man/Makefile           \
           doc/man/man1/Makefile      \
@@ -342,5 +349,6 @@ AC_OUTPUT(Makefile                   \
           test/exonerate/Makefile    \
           test/data/Makefile         \
           test/data/cdna/Makefile    \
-          test/data/protein/Makefile )
+          test/data/protein/Makefile ])
+AC_OUTPUT
 
